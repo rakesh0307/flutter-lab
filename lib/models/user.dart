@@ -3,12 +3,14 @@ class User {
   final String email;
   final String password;
   final String username;
+  final String role; // 'doctor' or 'patient'
 
   User({
     required this.id,
     required this.email,
     required this.password,
     required this.username,
+    required this.role,
   });
 
   factory User.fromMap(Map<String, dynamic> map, String id) {
@@ -17,6 +19,7 @@ class User {
       email: map['email'] ?? '',
       password: map['password'] ?? '',
       username: map['username'] ?? '',
+      role: map['role'] ?? 'patient',
     );
   }
 
@@ -25,6 +28,7 @@ class User {
       'email': email,
       'password': password,
       'username': username,
+      'role': role,
     };
   }
 }

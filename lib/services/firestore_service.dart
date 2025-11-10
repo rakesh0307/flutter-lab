@@ -1,4 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/word.dart';
 import '../models/user.dart';
 
@@ -6,43 +10,49 @@ class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Collection references
-  CollectionReference get _wordsCollection => _firestore.collection('dictionary_words');
+  CollectionReference get _videosCollection => _firestore.collection('videos');
   CollectionReference get _usersCollection => _firestore.collection('users');
 
-  // Add a new word
-  Future<void> addWord(String word, String meaning) async {
-    await _wordsCollection.add({
-      'word': word,
-      'meaning': meaning,
+  // Add new video data
+  Future<void> addVideo(String title, String description, String thumbnailUrl, String videoUrl) async {
+    await _videosCollection.add({
+      'title': title,
+      'description': description,
+      'thumbnailUrl': thumbnailUrl,
+      'videoUrl': videoUrl,
       'timestamp': FieldValue.serverTimestamp(),
-      'brand': 'Alfa',
     });
   }
 
-  // Get all words as stream
-  Stream<List<Word>> getWords() {
-    return _wordsCollection.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) => Word.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+  // Get all videos as stream
+  Stream<List<VideoData>> getVideos() {
+    return _videosCollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) => VideoData.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
     });
   }
 
-  // Search words by query
-  Stream<List<Word>> searchWords(String query) {
+  // Search videos by query (title or description)
+  Stream<List<VideoData>> searchVideos(String query) {
     if (query.isEmpty) {
-      return getWords();
+      return getVideos();
     }
-    return _wordsCollection
-        .where('word', isGreaterThanOrEqualTo: query)
-        .where('word', isLessThan: query + 'z')
+    return _videosCollection
+        .where('title', isGreaterThanOrEqualTo: query)
+        .where('title', isLessThan: query + '\uf8ff')
         .snapshots()
         .map((snapshot) {
-          return snapshot.docs.map((doc) => Word.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
+          return snapshot.docs.map((doc) => VideoData.fromMap(doc.data() as Map<String, dynamic>, doc.id)).toList();
         });
   }
 
-  // Update word meaning
-  Future<void> updateWord(String id, String newMeaning) async {
-    await _wordsCollection.doc(id).update({'meaning': newMeaning});
+  // Update video
+  Future<void> updateVideo(String id, String title, String description, String thumbnailUrl, String videoUrl) async {
+    await _videosCollection.doc(id).update({
+      'title': title,
+      'description': description,
+      'thumbnailUrl': thumbnailUrl,
+      'videoUrl': videoUrl,
+    });
   }
 
   // Get user by email and password
@@ -57,5 +67,22 @@ class FirestoreService {
       return User.fromMap(doc.data() as Map<String, dynamic>, doc.id);
     }
     return null;
+  }
+
+  // Upload file to Firebase Storage and return download URL
+  Future<String> uploadFile(dynamic file, String path) async {
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    UploadTask uploadTask;
+    if (kIsWeb) {
+      // For web, file is Uint8List
+      uploadTask = ref.putData(file as Uint8List);
+    } else {
+      // For mobile, file is File
+      uploadTask = ref.putFile(file as File);
+    }
+
+    final snapshot = await uploadTask.whenComplete(() {});
+    return await snapshot.ref.getDownloadURL();
   }
 }

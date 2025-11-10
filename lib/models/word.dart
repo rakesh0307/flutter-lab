@@ -1,36 +1,40 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Word {
+class VideoData {
   final String id;
-  final String word;
-  final String meaning;
+  final String title;
+  final String description;
+  final String thumbnailUrl;
+  final String videoUrl;
   final DateTime timestamp;
-  final String brand;
 
-  Word({
+  VideoData({
     required this.id,
-    required this.word,
-    required this.meaning,
+    required this.title,
+    required this.description,
+    required this.thumbnailUrl,
+    required this.videoUrl,
     required this.timestamp,
-    required this.brand,
   });
 
-  factory Word.fromMap(Map<String, dynamic> map, String id) {
-    return Word(
+  factory VideoData.fromMap(Map<String, dynamic> map, String id) {
+    return VideoData(
       id: id,
-      word: map['word'] ?? '',
-      meaning: map['meaning'] ?? '',
+      title: map['title'] ?? '',
+      description: map['description'] ?? '',
+      thumbnailUrl: map['thumbnailUrl'] ?? '',
+      videoUrl: map['videoUrl'] ?? '',
       timestamp: (map['timestamp'] as Timestamp).toDate(),
-      brand: map['brand'] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'word': word,
-      'meaning': meaning,
+      'title': title,
+      'description': description,
+      'thumbnailUrl': thumbnailUrl,
+      'videoUrl': videoUrl,
       'timestamp': timestamp,
-      'brand': brand,
     };
   }
 }

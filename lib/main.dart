@@ -3,9 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
-import 'screens/add_word_screen.dart';
+import 'screens/add_video_screen.dart';
 import 'screens/search_screen.dart';
-import 'screens/edit_word_screen.dart';
+import 'screens/edit_video_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,16 +17,16 @@ void main() async {
     // Handle Firebase initialization error gracefully
     debugPrint('Firebase initialization error: $e');
   }
-  runApp(const AlfaApp());
+  runApp(const VideoStreamingApp());
 }
 
-class AlfaApp extends StatelessWidget {
-  const AlfaApp({super.key});
+class VideoStreamingApp extends StatelessWidget {
+  const VideoStreamingApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Alfa Dictionary',
+      title: 'Video Streaming',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
@@ -34,10 +34,10 @@ class AlfaApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const AuthWrapper(),
-        '/home': (context) => const HomeScreen(),
-        '/add': (context) => const AddWordScreen(),
+        '/home': (context) => const VideoStreamingHomeScreen(),
+        '/add': (context) => const AddVideoScreen(),
         '/search': (context) => const SearchScreen(),
-        '/edit': (context) => const EditWordScreen(),
+        '/edit': (context) => const EditVideoScreen(),
       },
     );
   }
@@ -69,19 +69,19 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoggedIn ? const HomeScreen() : const LoginScreen();
+    return _isLoggedIn ? const VideoStreamingHomeScreen() : const LoginScreen();
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class VideoStreamingHomeScreen extends StatelessWidget {
+  const VideoStreamingHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Alfa Dictionary'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('Video Streaming'),
+        backgroundColor: const Color(0xFF2196F3),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -99,29 +99,29 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Welcome to Alfa Dictionary',
+              'Welcome to Video Streaming',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/add'),
-              child: const Text('Exercise 1: Add Word'),
+              child: const Text('Add Video'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/search'),
-              child: const Text('Exercise 2: Search Words'),
+              child: const Text('Browse Videos'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/edit'),
-              child: const Text('Exercise 3: Edit Words'),
+              child: const Text('Edit Videos'),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => Navigator.pushNamed(context, '/'),
-              child: const Text('Exercise 4: Login (Already logged in)'),
+              child: const Text('Login (Already logged in)'),
             ),
           ],
         ),

@@ -44,8 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login - Alfa'),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: const Text('Video Streaming Login'),
+        backgroundColor: const Color(0xFF2196F3),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

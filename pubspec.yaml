@@ -42,6 +42,16 @@ dependencies:
   # Shared Preferences for session persistence
   shared_preferences: ^2.2.2
 
+  # Video player for streaming videos
+  video_player: ^2.8.6
+
+  # Firebase Storage for file uploads
+  firebase_storage: ^12.4.10
+
+  # File and image pickers for uploads
+  image_picker: ^1.1.2
+  file_picker: ^8.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

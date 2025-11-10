@@ -11,23 +11,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_5/main.dart';
 
 void main() {
-  testWidgets('Alfa Dictionary app smoke test', (WidgetTester tester) async {
+  testWidgets('Step Counter smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AlfaApp());
+    await tester.pumpWidget(const StepCounterApp());
 
     // Wait for Firebase initialization and auth check
     await tester.pumpAndSettle();
 
-    // Verify that the app title is correct (in app bar)
-    expect(find.text('Alfa Dictionary'), findsOneWidget);
+    // Verify that the login screen is shown initially
+    expect(find.text('Step Counter Login'), findsOneWidget);
 
-    // Verify that the welcome text is displayed
-    expect(find.text('Welcome to Alfa Dictionary'), findsOneWidget);
+    // Verify that email and password fields are present
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Password'), findsOneWidget);
 
-    // Verify that exercise buttons are present
-    expect(find.text('Exercise 1: Add Word'), findsOneWidget);
-    expect(find.text('Exercise 2: Search Words'), findsOneWidget);
-    expect(find.text('Exercise 3: Edit Words'), findsOneWidget);
-    expect(find.text('Exercise 4: Login (Already logged in)'), findsOneWidget);
+    // Verify that login button is present
+    expect(find.text('Login'), findsOneWidget);
   });
 }
